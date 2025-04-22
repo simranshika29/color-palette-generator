@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Color Palette Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+  <h1 class="text-3xl font-bold mb-6 text-blue-600">🎨 Color Palette Generator</h1>
+  
+  <div id="palette" class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl mb-6">
+    <!-- Color boxes will be inserted here -->
+  </div>
+
+  <button onclick="generatePalette()" class="bg-blue-500 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-600 transition">
+    Generate New Palette
+  </button>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg hidden">
+    HEX copied!
+  </div>
+
+  <script>
+    const palette = document.getElementById("palette");
+    const toast = document.getElementById("toast");
+
+    function getRandomHexColor() {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    function showToast() {
+      toast.classList.remove("hidden");
+      setTimeout(() => {
+        toast.classList.add("hidden");
+      }, 1500);
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(showToast);
+    }
+
+    function generatePalette() {
+      palette.innerHTML = "";
+      for (let i = 0; i < 4; i++) {
+        const color = getRandomHexColor();
+        const box = document.createElement("div");
+        box.className = "h-40 rounded-xl shadow cursor-pointer flex items-center justify-center text-white font-semibold text-lg hover:scale-105 transition";
+        box.style.backgroundColor = color;
+        box.innerText = color;
+        box.onclick = () => copyToClipboard(color);
+        palette.appendChild(box);
+      }
+    }
+
+    generatePalette(); // Generate on load
+  </script>
+</body>
+</html>
